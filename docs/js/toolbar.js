@@ -1,5 +1,5 @@
 /*
- * orange-confort-plus - version 5.0.0-alpha.5 - 17/07/2024
+ * orange-confort-plus - version 5.0.0-alpha.5 - 18/07/2024
  * Enhance user experience on web sites
  * © 2014 - 2024 Orange SA
  */
@@ -3316,8 +3316,12 @@ class BtnSettingComponent extends HTMLElement {
             this.setDisabledState();
         }
     }
-    getValueLabel=value => value;
+    getValueLabel=value => {
+        const string = value === "noModifications" ? stringServiceInstance.normalizeSettingCamelCase(value) : `${this.name}-${stringServiceInstance.normalizeSettingCamelCase(value)}`;
+        return i18nServiceInstance.getMessage(string);
+    };
     setTitle=() => {
+        const settingName = i18nServiceInstance.getMessage(`setting-${this.name}`);
         const settingsNumber = this.settingsList.length;
         if (settingsNumber > 0) {
             const currentValueLabel = this.getValueLabel(this.value);
@@ -3333,7 +3337,7 @@ class BtnSettingComponent extends HTMLElement {
                 content = i18nServiceInstance.getMessage("multiclic", [ currentValueLabel, currentIndex, settingsNumber.toString(), nextValueLabel, (nextValueIndex + 1).toString() ]);
             }
             [ "title", "aria-label" ].forEach((attribute => {
-                this.settingBtn.setAttribute(attribute, `${this.name}${content}`);
+                this.settingBtn.setAttribute(attribute, `${settingName}${content}`);
             }));
         }
     };
